@@ -1,8 +1,12 @@
 package com.jpaternina.ForoHub.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity               // Entidad
 @Data                // Lombok
@@ -15,6 +19,8 @@ public class Autor {
     private String nombre;
     @Column(nullable = false)
     private String apellido;
-/*    @OneToMany(fetch = FetchType.LAZY, mappedBy = "autor", cascade = CascadeType.ALL)
-    List<Topic> topics;*/
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "autor", cascade = CascadeType.ALL)
+    @JsonManagedReference // Se serializa para evitar una recursión infinita
+    private List<Topico> topics;
+
 }
