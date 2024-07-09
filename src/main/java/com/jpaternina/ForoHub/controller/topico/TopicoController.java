@@ -4,9 +4,7 @@ import com.jpaternina.ForoHub.model.Topico;
 import com.jpaternina.ForoHub.service.TopicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,11 @@ public class TopicoController {
     @GetMapping("/topicos")
     private List<Topico> getAllTopicos() {
         return topicoServi.getAllTopicos();
+    }
+
+    // Agregar nuevo tópico
+    @PostMapping("/new-topico")
+    private void addTopico(@RequestBody Topico newTopico) {
+        topicoServi.addTopico(newTopico);
     }
 }

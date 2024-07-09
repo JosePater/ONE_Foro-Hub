@@ -29,9 +29,6 @@ public class Topico {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
 
-    // Llave foránea
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "autor_id", nullable = false)
-    @JsonBackReference // Se serializa para evitar una recursión infinita
-    private Autor autor;
+    @Column(name = "autor_id", nullable = false)
+    private Long autorId;
 }
