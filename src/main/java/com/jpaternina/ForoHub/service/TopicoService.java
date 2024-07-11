@@ -63,4 +63,16 @@ public class TopicoService {
         }
     }
 
+    // Eliminar tópico
+    public void deleteTopico(Long id) {
+        Optional<Topico> topico = topicoReposi.findById(id);
+        // Si exite el tópico
+        if (topico.isPresent()) {
+            topicoReposi.deleteById(id);
+            System.out.println("Tópico #"+id+" eliminado");
+        } else {
+            System.out.println("Tópico no existe!");
+        }
+    }
+
 }

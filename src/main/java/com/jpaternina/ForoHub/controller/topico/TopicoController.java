@@ -42,4 +42,10 @@ public class TopicoController {
         updatedTopico.setId(id);
         topicoServi.updateTopico(updatedTopico, id);
     }
+
+    // Eliminar tópico
+    @DeleteMapping("/topico/{id}")
+    private void deleteTopico(@PathVariable Long id) {
+        topicoServi.deleteTopico(id);
+    }
 }
