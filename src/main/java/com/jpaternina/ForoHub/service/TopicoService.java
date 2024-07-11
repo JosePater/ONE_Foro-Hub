@@ -48,4 +48,9 @@ public class TopicoService {
 
     }
 
+    //Obtener tópico por Id
+    public Optional<Topico> getTopicoById(Long id) {
+        return topicoReposi.findById(id);
+    }
+
 }

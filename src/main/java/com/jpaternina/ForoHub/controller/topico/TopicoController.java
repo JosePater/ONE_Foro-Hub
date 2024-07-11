@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller // Controlador
 @RestController
@@ -27,5 +28,11 @@ public class TopicoController {
     @PostMapping("/new-topico")
     private void addTopico(@RequestBody Topico newTopico) {
         topicoServi.addTopico(newTopico);
+    }
+
+    // Obtener tópico por id
+    @GetMapping("/topico/{id}")
+    private Optional<Topico> getTopicoById(@PathVariable Long id) {
+        return topicoServi.getTopicoById(id);
     }
 }
