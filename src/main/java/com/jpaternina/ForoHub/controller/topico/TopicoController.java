@@ -11,40 +11,40 @@ import java.util.Optional;
 
 @Controller // Controlador
 @RestController
-@RequestMapping
 @RequiredArgsConstructor
+@RequestMapping("/topicos")
 public class TopicoController {
 
     // Inyección del servicio
     private final TopicoService topicoServi;
 
     // Obtener todos los tópicos
-    @GetMapping("/topicos")
+    @GetMapping()
     private List<Topico> getAllTopicos() {
         return topicoServi.getAllTopicos();
     }
 
     // Agregar nuevo tópico
-    @PostMapping("/new-topico")
+    @PostMapping()
     private void addTopico(@RequestBody Topico newTopico) {
         topicoServi.addTopico(newTopico);
     }
 
     // Obtener tópico por id
-    @GetMapping("/topico/{id}")
+    @GetMapping("/{id}")
     private Optional<Topico> getTopicoById(@PathVariable Long id) {
         return topicoServi.getTopicoById(id);
     }
 
     // Editar tópico
-    @PutMapping("/topico/{id}")
+    @PutMapping("/{id}")
     private void updateTopic(@RequestBody Topico updatedTopico, @PathVariable Long id) {
         updatedTopico.setId(id);
         topicoServi.updateTopico(updatedTopico, id);
     }
 
     // Eliminar tópico
-    @DeleteMapping("/topico/{id}")
+    @DeleteMapping("/{id}")
     private void deleteTopico(@PathVariable Long id) {
         topicoServi.deleteTopico(id);
     }
