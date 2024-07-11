@@ -35,4 +35,11 @@ public class TopicoController {
     private Optional<Topico> getTopicoById(@PathVariable Long id) {
         return topicoServi.getTopicoById(id);
     }
+
+    // Editar tópico
+    @PutMapping("/topico/{id}")
+    private void updateTopic(@RequestBody Topico updatedTopico, @PathVariable Long id) {
+        updatedTopico.setId(id);
+        topicoServi.updateTopico(updatedTopico, id);
+    }
 }

@@ -45,12 +45,22 @@ public class TopicoService {
         } else {
             System.out.println("Autor no registrado en la base de datos");
         }
-
     }
 
     //Obtener tópico por Id
     public Optional<Topico> getTopicoById(Long id) {
         return topicoReposi.findById(id);
+    }
+
+    // Actualizar tópico
+    public void updateTopico(Topico newTopico, Long id) {
+        Optional<Topico> topico = topicoReposi.findById(id);
+        // Si el tópico existe
+        if (topico.isPresent()) {
+            addTopico(newTopico); // Editar tópico
+        } else {
+            System.out.println("Tópico no existe");
+        }
     }
 
 }
