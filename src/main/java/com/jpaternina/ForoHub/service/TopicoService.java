@@ -32,15 +32,27 @@ public class TopicoService {
         return topicoReposi.findAll();
     }
 
-    // Agregar nuevo tópico
+    // Agregar nuevo tópico o editar
     public void addTopico(Topico newTopico) {
         Optional<Autor> autorEncontrado = autorReposi.findById(newTopico.getAutorId());
 
         // Si el autor está registrado en la db
         if (autorEncontrado.isPresent()) {
-            newTopico.setFechaCreacion(getDate());
-            System.out.println("TopicoService: " + newTopico);
-            topicoReposi.save(newTopico);
+            newTopico.setFechaCreacion(getDate()); // Set fecha actual
+
+            // Verificación si existe un tópico (db) que tenga el mismo título y mensaje que el que se va a guardar
+            Optional<Topico> result = topicoReposi.findByTituloAndMensaje(newTopico.getTitulo(), newTopico.getMensaje());
+
+            if (result.isPresent()) {
+                // Si se desea editar un tópico
+                if (newTopico.getId() == result.get().getId()) {
+                    topicoReposi.save(newTopico); // Guardar tópico
+                    System.out.println("Tópico #"+ newTopico.getId()+" editado!!!");
+                } else System.out.println("Tópico ya existe (título y mensaje)");
+            } else {
+                System.out.println("Nuevo tópico guardado: " + newTopico);
+                topicoReposi.save(newTopico); // Guardar tópico
+            }
 
         } else {
             System.out.println("Autor no registrado en la base de datos");
