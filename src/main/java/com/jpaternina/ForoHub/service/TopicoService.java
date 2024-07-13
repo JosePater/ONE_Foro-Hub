@@ -5,6 +5,8 @@ import com.jpaternina.ForoHub.model.Topico;
 import com.jpaternina.ForoHub.repository.AutorRepository;
 import com.jpaternina.ForoHub.repository.TopicoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
@@ -28,12 +30,17 @@ public class TopicoService {
     }
 
     // Obtener todos los tópicos registrados en la db
-    public List<Topico> getAllTopicos() {
-        return topicoReposi.findAll();
+    public ResponseEntity<Optional<List<Topico>>> getAllTopicos() {
+        Optional<List<Topico>> response = Optional.of(topicoReposi.findAll());
+        if (response.get().isEmpty()) {
+            System.out.println("No hay ningún tópico creado!");
+            return ResponseEntity.noContent().build(); // Sin tópicos (204)
+        }
+        return ResponseEntity.ok(response); // OK (200)
     }
 
     // Agregar nuevo tópico o editar
-    public void addTopico(Topico newTopico) {
+    public ResponseEntity<Topico> addTopico(Topico newTopico) {
         Optional<Autor> autorEncontrado = autorReposi.findById(newTopico.getAutorId());
 
         // Si el autor está registrado en la db
@@ -48,42 +55,56 @@ public class TopicoService {
                 if (newTopico.getId() == result.get().getId()) {
                     topicoReposi.save(newTopico); // Guardar tópico
                     System.out.println("Tópico #"+ newTopico.getId()+" editado!!!");
-                } else System.out.println("Tópico ya existe (título y mensaje)");
+                    return ResponseEntity.ok(newTopico); // OK (200)
+                } else {
+                    System.out.println("Tópico ya existe (título y mensaje)");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Conflicto (409)
+                }
             } else {
                 System.out.println("Nuevo tópico guardado: " + newTopico);
                 topicoReposi.save(newTopico); // Guardar tópico
+                return ResponseEntity.ok(newTopico); // OK (200)
             }
 
         } else {
             System.out.println("Autor no registrado en la base de datos");
+            return ResponseEntity.notFound().build(); // NO encontrado (404)
         }
     }
 
     //Obtener tópico por Id
-    public Optional<Topico> getTopicoById(Long id) {
-        return topicoReposi.findById(id);
+    public ResponseEntity getTopicoById(Long id) {
+        Optional<Topico> response = topicoReposi.findById(id);
+        if (response.isPresent()) {
+            return ResponseEntity.ok(response); // OK (200)
+        }
+        System.out.println("Tópico no existe!");
+        return ResponseEntity.notFound().build(); // Tópico no encontradod (404)
     }
 
     // Actualizar tópico
-    public void updateTopico(Topico newTopico, Long id) {
+    public ResponseEntity<Topico> updateTopico(Topico newTopico, Long id) {
         Optional<Topico> topico = topicoReposi.findById(id);
         // Si el tópico existe
         if (topico.isPresent()) {
-            addTopico(newTopico); // Editar tópico
+            return addTopico(newTopico); // Editar tópico
         } else {
             System.out.println("Tópico no existe");
+            return ResponseEntity.notFound().build(); // Tópico no encontrado (404)
         }
     }
 
     // Eliminar tópico
-    public void deleteTopico(Long id) {
+    public ResponseEntity deleteTopico(Long id) {
         Optional<Topico> topico = topicoReposi.findById(id);
         // Si exite el tópico
         if (topico.isPresent()) {
             topicoReposi.deleteById(id);
             System.out.println("Tópico #"+id+" eliminado");
+            return ResponseEntity.noContent().build(); // Éxito sin retornar nada (204)
         } else {
             System.out.println("Tópico no existe!");
+            return ResponseEntity.notFound().build(); // Tópico No encontrado (404)
         }
     }
 
