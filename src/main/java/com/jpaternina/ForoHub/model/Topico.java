@@ -1,6 +1,7 @@
 package com.jpaternina.ForoHub.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Topico {
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Bogota")
     private Date fechaCreacion;
 
     @Column(name = "autor_id", nullable = false)
