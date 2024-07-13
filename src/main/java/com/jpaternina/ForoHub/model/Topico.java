@@ -2,6 +2,7 @@ package com.jpaternina.ForoHub.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,11 @@ public class Topico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank // No permite texto vacío ("")
     @Column(nullable = false)
     private String titulo;
 
+    @NotBlank // No permite texto vacío ("")
     @Column(nullable = false)
     private String mensaje;
 
